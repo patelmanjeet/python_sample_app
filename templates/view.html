@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="card" class="m-5 p-2">
+    <br>
+    <h5 class="card-title">{{ pitcher.Name }} - {{ pitcher.Team }}</h5>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{ pitcher.Position }}</li>
+        <li class="list-group-item">{{ pitcher.Height_in }}</li>
+        <li class="list-group-item">{{ pitcher.Weight_lb }}</li>
+        <li class="list-group-item">{{ pitcher.Age }}</li>
+    </ul>
+    <br>
+    <div class="card-body">
+        <a href="/edit/{{pitcher.id}}" class="card-link btn btn-primary">EDIT</a>
+    </div>
+</div>
+<br>
+<form action="/delete/{{pitcher.id}}" method="post"><button type="submit" class="btn btn-danger">DELETE</button></form>
+
+
+{% endblock %}
