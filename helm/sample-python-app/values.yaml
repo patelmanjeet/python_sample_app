@@ -4,6 +4,15 @@
 
 replicaCount: 1
 
+cloud_sql_proxy:
+  image:
+    repository: gcr.io/cloudsql-docker/gce-proxy
+    tag: 1.17
+    pullPolicy: IfNotPresent
+
+  credentialsSecretName: cloudsql-db-credentials
+  clientSaSecretName: cloudsql-client-sa
+
 image:
   repository:
   pullPolicy: IfNotPresent

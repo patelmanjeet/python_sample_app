@@ -33,6 +33,19 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DATABASE_HOST
+              value: 127.0.0.1
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cloud_sql_proxy.credentialsSecretName }}
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cloud_sql_proxy.credentialsSecretName }}
+                  key: password
           ports:
             - name: http
               containerPort: 5000
@@ -47,6 +60,32 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        - name: cloud-sql-proxy
+          image: "{{ .Values.cloud_sql_proxy.image.repository }}:{{ .Values.cloud_sql_proxy.image.tag  }}"
+          imagePullPolicy: {{ .Values.cloud_sql_proxy.image.pullPolicy }}
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances=${INSTANCE_CONNECTION_NAME}=tcp:${DB_PORT}"
+            - "-credential_file=/secrets/service_account.json"
+          env:
+            - name: INSTANCE_CONNECTION_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cloud_sql_proxy.credentialsSecretName }}
+                  key: instance_connection_name
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cloud_sql_proxy.credentialsSecretName }}
+                  key: port
+          volumeMounts:
+            - name: cloudsql-client-sa
+              mountPath: /secrets/
+              readOnly: true
+      volumes:
+      - name: cloudsql-client-sa
+        secret:
+          secretName: {{ .Values.cloud_sql_proxy.clientSaSecretName }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
