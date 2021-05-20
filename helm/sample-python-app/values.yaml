@@ -12,6 +12,7 @@ cloud_sql_proxy:
 
   credentialsSecretName: cloudsql-db-credentials
   clientSaSecretName: cloudsql-client-sa
+  instanceConnectionName:
 
 image:
   repository:
