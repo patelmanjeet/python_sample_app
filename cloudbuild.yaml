@@ -31,9 +31,9 @@ steps:
 
 substitutions:
   _CUSTOM_IMAGE_NAME: sample-python-app
-  _CUSTOM_REGION: us-central1
-  _CUSTOM_ZONE: us-central1-c
-  _CUSTOM_CLUSTER: cluster-1
   _HELM_RELEASE_NAME: sample-python-app
   _HELM_CHART_NAME: ./helm/sample-python-app/
-  _CLOUD_SQL_DBNAME: mydb2
+  _CUSTOM_REGION:
+  _CUSTOM_ZONE:
+  _CUSTOM_CLUSTER:
+  _CLOUD_SQL_DBNAME:
